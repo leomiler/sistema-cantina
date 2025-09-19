@@ -1,0 +1,43 @@
+# Node modules
+node_modules/
+*/node_modules/
+
+# Build outputs
+dist/
+build/
+*/dist/
+*/build/
+
+# Environment files
+.env
+.env.*
+!.env.production
+
+# Git
+.git/
+.gitignore
+
+# Development files
+.vscode/
+.idea/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Cache
+.cache/
+.parcel-cache/
+
+# Documentation
+*.md
+!README.md
+
+# Server specific ignores
+server/.env
+server/dist/
+
+# Client specific ignores
+client/dist/
+client/node_modules/
