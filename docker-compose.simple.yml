@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  cantina-backend:
+    image: node:18-alpine
+    command: >
+      sh -c "
+        apk add --no-cache git &&
+        git clone https://github.com/leomiler/sistema-cantina.git /app &&
+        cd /app/server &&
+        npm install &&
+        npx prisma generate &&
+        npm run build &&
+        node dist/index.js
+      "
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - DATABASE_URL=mysql://cantina_user:cantina123@tasks.mysql:3306/cantina
+    ports:
+      - "3001:3001"
+    deploy:
+      replicas: 1
+    networks:
+      - default
+
+networks:
+  default:
+    driver: overlay
