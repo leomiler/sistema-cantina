@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Produto {
+  id             Int         @id @default(autoincrement())
+  nome           String      @db.VarChar(120)
+  preco          Decimal     @db.Decimal(10, 2)
+  estoqueInicial Int         @default(0) @map("estoque_inicial")
+  estoqueAtual   Int         @default(0) @map("estoque_atual")
+  ativo          Boolean     @default(true)
+  criadoEm       DateTime    @default(now()) @map("criado_em")
+
+  vendaItens     VendaItem[]
+
+  @@map("produtos")
+}
+
+model Venda {
+  id             BigInt      @id @default(autoincrement())
+  criadoEm       DateTime    @default(now()) @map("criado_em")
+  formaPagamento FormaPagamento @map("forma_pagamento")
+  total          Decimal     @db.Decimal(10, 2)
+
+  itens          VendaItem[]
+
+  @@index([criadoEm], map: "idx_vendas_data")
+  @@map("vendas")
+}
+
+model VendaItem {
+  id             BigInt   @id @default(autoincrement())
+  vendaId        BigInt   @map("venda_id")
+  produtoId      Int      @map("produto_id")
+  quantidade     Int
+  precoUnitario  Decimal  @db.Decimal(10, 2) @map("preco_unitario")
+  subtotal       Decimal  @db.Decimal(10, 2)
+
+  venda          Venda    @relation(fields: [vendaId], references: [id])
+  produto        Produto  @relation(fields: [produtoId], references: [id])
+
+  @@index([vendaId], map: "idx_itens_venda")
+  @@map("venda_itens")
+}
+
+enum FormaPagamento {
+  DINHEIRO
+  PIX
+}
