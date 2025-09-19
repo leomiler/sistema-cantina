@@ -10,7 +10,11 @@
     "build": "npm run build:client && npm run build:server",
     "build:client": "cd client && npm run build",
     "build:server": "cd server && npm run build",
-    "setup": "npm install && cd client && npm install && cd ../server && npm install"
+    "setup": "npm install && cd client && npm install && cd ../server && npm install",
+    "deploy:setup": "npm run setup && cd server && npm run db:generate",
+    "deploy:migrate": "cd server && npm run db:migrate",
+    "deploy:build": "npm run build",
+    "start": "cd server && npm start"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
